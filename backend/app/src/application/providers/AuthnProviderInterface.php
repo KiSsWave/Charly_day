@@ -4,8 +4,8 @@ namespace charly\application\providers;
 
 
 use DateTime;
-use boz\core\dto\UserDTO;
-use boz\core\dto\CredentialDTO;
+use charly\core\dto\UserDTO;
+use charly\core\dto\CredentialDTO;
 use PhpParser\Token;
 
 interface AuthnProviderInterface

@@ -135,8 +135,6 @@ export default {
         errors.description = 'La description doit contenir au moins 10 caractères'
         isValid = false
       }
-
-      // Validation de la compétence
       if (!form.competence) {
         errors.competence = 'La sélection d\'une compétence est requise'
         isValid = false
