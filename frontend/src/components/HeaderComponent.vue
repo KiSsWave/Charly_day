@@ -1,15 +1,14 @@
 <template>
   <header class="header">
-    <div class="logo">
+    <div class="logo" @click="$router.push({ name: 'HomeView' })">
       <img src="@/assets/logo.png" alt="Charly">
       <h1>Charly</h1>
     </div>
     <nav>
       <ul>
-        <li><a href="#home">Accueil</a></li>
-        <li><a href="#about">À propos</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><router-link to="/">Accueil</router-link></li>
+        <li><router-link to="/login">Connexion</router-link></li>
+        <li><router-link to="/register">Inscription</router-link></li>
       </ul>
     </nav>
   </header>
@@ -48,6 +47,10 @@ export default {
   font-size: 2rem;
 }
 
+.logo:hover {
+  cursor: pointer;
+}
+
 nav ul {
   list-style-type: none;
   display: flex;
@@ -65,5 +68,6 @@ nav a {
 
 nav a:hover {
   color: #ffcccc;
+  text-decoration: underline;
 }
 </style>
