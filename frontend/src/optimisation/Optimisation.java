@@ -117,7 +117,7 @@ public class Optimisation {
 
 
 
-    public static Map<String, Integer> algorithmeGenetique(List<Besoin> besoins, Map<String, Salarie> salaries, int generations, int populationSize) {
+    public static Map<String, Integer> algorithmeGenetique(List<Besoin> besoins, Map<String, Salarie> salaries, int generations) {
         Map<String, Integer> meilleureAffectation = new HashMap<>();
         int meilleurScore = Integer.MIN_VALUE;
 
@@ -135,7 +135,8 @@ public class Optimisation {
 
     private static Map<String, Integer> genererAffectation(List<Besoin> besoins, Map<String, Salarie> salaries) {
         Map<String, Integer> affectation = new HashMap<>();
-        List<String> salariesDispo = new ArrayList<>(salaries.keySet());
+        List<String> salariesDispo = new ArrayList<>(salaries.keySet()); // Liste des salariés disponibles
+        Set<String> salariesNonAffectes = new HashSet<>(salaries.keySet()); // Liste des salariés non affectés
 
         for (Besoin besoin : besoins) {
             String meilleurSalarie = null;
@@ -153,10 +154,19 @@ public class Optimisation {
 
             if (meilleurSalarie != null) {
                 affectation.put(meilleurSalarie, besoin.id);
-                salariesDispo.remove(meilleurSalarie); // Un salarié ne peut être affecté qu'à un besoin
+                salariesDispo.remove(meilleurSalarie);
+                salariesNonAffectes.remove(meilleurSalarie); // Retirer de la liste des non-affectés
             }
         }
+
+        // Appliquer le malus aux salariés sans affectation
+        for (String salarie : salariesNonAffectes) {
+            affectation.put(salarie, -1); // Affectation fictive pour signaler le malus
+        }
+
         return affectation;
     }
+
+
 
 }
