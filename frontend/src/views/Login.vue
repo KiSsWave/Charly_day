@@ -1,4 +1,5 @@
 <template>
+  <HeaderComponent />
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
@@ -44,12 +45,20 @@
       </form>
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <script>
+import FooterComponent from '@/components/FooterComponent.vue';
+import HeaderComponent from '@/components/HeaderComponent.vue';
+import axios from '../api/index.js';
+
 export default {
   name: "LoginView",
-
+  components: {
+    FooterComponent,
+    HeaderComponent,
+  },
   data() {
     return {
       form: {
@@ -67,14 +76,11 @@ export default {
       this.error = null;
 
       try {
-        // Appel API à implémenter
-        const response = await this.$http.post("/api/auth/login", this.form);
+        const response = await axios.post("/signin", this.form);
 
-        // Stocker le token
         const { token } = response.data;
         localStorage.setItem("token", token);
 
-        // Rediriger vers la page d'accueil
         this.$router.push({ name: "home" });
       } catch (error) {
         this.error =
@@ -104,11 +110,10 @@ export default {
 }
 
 .auth-container {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
   padding: 1rem;
 }
 
@@ -180,11 +185,12 @@ export default {
   font-size: 0.875rem;
   color: #1a202c;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #3182ce;
+  border-color: #b10e0e;
   box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
 }
 
@@ -222,7 +228,7 @@ export default {
 .auth-button {
   width: 100%;
   padding: 0.75rem 1.5rem;
-  background-color: #3182ce;
+  background-color: #d41717;
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -237,7 +243,7 @@ export default {
 }
 
 .auth-button:hover {
-  background-color: #2c5282;
+  background-color: #b10e0e;
 }
 
 .auth-button:focus {

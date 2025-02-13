@@ -21,12 +21,13 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: red;
+  background-color: #b10e0e;
   color: white;
   text-align: center;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+  padding: 16px 32px;
 }
 
 .footer-content {
@@ -38,6 +39,7 @@ export default {
 
 footer p {
   margin: 0;
+  font-size: larger;
 }
 
 nav ul {
@@ -51,7 +53,7 @@ nav ul {
 nav a {
   color: white;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: larger;
   transition: color 0.3s;
 }
 

@@ -1,6 +1,7 @@
 <template>
   <HeaderComponent />
   <div class="home">
+    <NeedListComponent />
   </div>
   <FooterComponent />
 </template>
@@ -8,11 +9,13 @@
 <script>
 import FooterComponent from '@/components/FooterComponent.vue'
 import HeaderComponent from '@/components/HeaderComponent.vue'
+import NeedListComponent from '@/components/NeedListComponent.vue';
 
 export default {
   name: 'HomeView',
   components: {
     FooterComponent,
+    NeedListComponent,
     HeaderComponent
   }
 }
@@ -40,7 +43,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 60px - 60px - 10px - 10px);
+  min-height: calc(100vh - 60px - 60px - 10px - 10px);
   font-size: 2rem;
   padding: 20px;
   box-sizing: border-box;

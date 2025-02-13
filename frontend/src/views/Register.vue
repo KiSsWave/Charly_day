@@ -1,4 +1,5 @@
 <template>
+  <HeaderComponent />
   <div class="auth-container">
     <div class="auth-card">
       <div class="auth-header">
@@ -7,10 +8,10 @@
 
       <form class="auth-form" @submit.prevent="handleRegister">
         <div class="form-group">
-          <label class="form-label" for="name">Nom complet</label>
+          <label class="form-label" for="login">Nom complet</label>
           <input
-            id="name"
-            v-model="form.name"
+            id="login"
+            v-model="form.login"
             type="text"
             class="form-input"
             placeholder="Nom complet"
@@ -48,17 +49,18 @@
           >
           <input
             id="password_confirmation"
-            v-model="form.password_confirmation"
+            v-model="password_confirmation"
             type="password"
             class="form-input"
             placeholder="Confirmation du mot de passe"
             required
           />
         </div>
+
         <p class="auth-subtitle">
-          Vous avez déjà un compte?
+          Vous avez déjà un compte ?
           <label @click="login" class="auth-link link">
-            Connectez-vous à votre compte existant
+            Connectez-vous
           </label>
         </p>
 
@@ -71,26 +73,35 @@
       </form>
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <script>
+import HeaderComponent from "@/components/HeaderComponent.vue";
+import axios from "../api";
+import FooterComponent from "@/components/FooterComponent.vue";
+
 export default {
   name: "RegisterView",
+  components: {
+    HeaderComponent,
+    FooterComponent,
+  },
   data() {
     return {
       form: {
-        name: "",
+        login: "",
         email: "",
         password: "",
-        password_confirmation: "",
       },
+      password_confirmation: "",
       isLoading: false,
       error: null,
     };
   },
   methods: {
     async handleRegister() {
-      if (this.form.password !== this.form.password_confirmation) {
+      if (this.form.password !== this.password_confirmation) {
         this.error = "Les mots de passe ne correspondent pas.";
         return;
       }
@@ -99,10 +110,8 @@ export default {
       this.error = null;
 
       try {
-        const response = await this.$http.post("/api/auth/register", this.form);
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-        this.$router.push({ name: "home" });
+        await axios.post("/register", this.form);
+        this.$router.push({ name: "login" });
       } catch (error) {
         this.error =
           error.response?.data?.message ||
@@ -131,11 +140,10 @@ export default {
 }
 
 .auth-container {
-  min-height: 100vh;
+  min-height: 80dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
   padding: 1rem;
 }
 
@@ -207,11 +215,12 @@ export default {
   font-size: 0.875rem;
   color: #1a202c;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #3182ce;
+  border-color: #b10e0e;
   box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
 }
 
@@ -249,7 +258,7 @@ export default {
 .auth-button {
   width: 100%;
   padding: 0.75rem 1.5rem;
-  background-color: #3182ce;
+  background-color: #d41717;
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -264,7 +273,7 @@ export default {
 }
 
 .auth-button:hover {
-  background-color: #2c5282;
+  background-color: #b10e0e;
 }
 
 .auth-button:focus {
