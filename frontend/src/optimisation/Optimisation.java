@@ -135,7 +135,7 @@ public class Optimisation {
 
     private static Map<String, Integer> genererAffectation(List<Besoin> besoins, Map<String, Salarie> salaries) {
         Map<String, Integer> affectation = new HashMap<>();
-        List<String> salariesDispo = new ArrayList<>(salaries.keySet());
+        List<String> salariesDispo = new ArrayList<>(salaries.keySet()); // Liste des salariés disponibles
         Set<String> salariesNonAffectes = new HashSet<>(salaries.keySet()); // Liste des salariés non affectés
 
         for (Besoin besoin : besoins) {
