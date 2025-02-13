@@ -12,4 +12,6 @@ interface NeedServiceInterface
     public function findByIdNeed(string $id): ?NeedDTO;
 
     public function findByClientNameNeed(string $clientName): array;
+
+    public function updateNeed(string $id, string $description, string $competence_type): NeedDTO;
 }

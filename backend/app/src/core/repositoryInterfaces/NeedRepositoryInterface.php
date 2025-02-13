@@ -14,6 +14,10 @@ interface NeedRepositoryInterface
 
     public function findByClientName(string $clientName): array;
 
+    public function update(string $id, string $description, string $competence_type): void;
+
+
+
 
 
 

@@ -34,10 +34,22 @@ class NeedService implements NeedServiceInterface
 
     public function findByClientNameNeed(string $clientName): array
     {
-        $needs = $this->needRepository->findByClientName($clientName);
+        return $this->needRepository->findByClientName($clientName);
 
-        return array_map(function(Need $need) {
-            return new NeedDTO($need);
-        }, $needs);
+    }
+
+    public function updateNeed(string $id, string $description, string $competence_type): NeedDTO
+    {
+
+        $this->needRepository->update($id, $description, $competence_type);
+
+
+        $need = $this->needRepository->findById($id);
+
+        if (!$need) {
+            throw new \RuntimeException("Le besoin n'a pas pu être récupéré après mise à jour");
+        }
+
+        return new NeedDTO($need);
     }
 }
