@@ -26,6 +26,30 @@ const secrets = [
     src: "https://www.youtube.com/embed/KuC7FFdIaQg?autoplay=1",
     position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }, // Centré au milieu
     size: { width: "640px", height: "360px" } // Format 16:9
+  },
+  {
+    name: "charliebitmyfinger",
+    code: ["c", "h", "a", "r", "l", "i", "e", "b", "i", "t", "m", "y", "f", "i", "n", "g", "e", "r"],
+    content: "iframe",
+    src: "https://www.youtube.com/embed/_OBlgSz8sSM?autoplay=1",
+    position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }, // Centré au milieu
+    size: { width: "640px", height: "512px" } // Format 5:4
+  },
+  {
+    name: "nevergiveup",
+    code: ["n", "e", "v", "e", "r", "g", "i", "v", "e", "u", "p"],
+    content: "iframe",
+    src: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1", // Le lien Rickroll
+    position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }, // Centré au milieu
+    size: { width: "640px", height: "360px" } // Format 16:9
+  },
+  {
+    name: "damned",
+    code: ["d", "a", "m", "n", "e", "d"],
+    content: "iframe", // Utilise un iframe pour intégrer SoundCloud
+    src: "https://www.youtube.com/embed/_4MvHGw62CI?autoplay=1",
+    position: { top: "50%", right: "50%", transform: "translate(-50%, -50%)"}, // Pas de position spécifique
+    size: { width: "640px", height: "50%"} // Pas de taille spécifique
   }
 ];
 
@@ -89,6 +113,8 @@ const closeSecret = () => {
            transform: secretPosition.transform || ''
          }">
       <button class="close-btn" @click="closeSecret">✖</button>
+
+      <!-- Affichage du contenu du secret -->
       <iframe v-if="secretContent === 'iframe'" :src="secretSrc" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
