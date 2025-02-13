@@ -52,7 +52,7 @@
 import FooterComponent from '@/components/FooterComponent.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import axios from '../api/index.js';
-import { setToken, setRole } from '../services/authProvider.js/index.js';
+import { setToken, setRole } from '../services/authProvider.js';
 
 export default {
   name: "LoginView",
