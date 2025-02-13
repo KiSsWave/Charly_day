@@ -14,12 +14,12 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/creation-besoin',
+      path: '/besoin/new',
       name: 'creation-besoin',
       component: CreationBesoin,
     },
     {
-      path: '/affichage-besoin',
+      path: '/besoin/:id',
       name: 'affichage-besoin',
       component: AffichageBesoin,
     },

@@ -23,16 +23,17 @@ export default {
 .footer {
   background-color: red;
   color: white;
-  padding: 2rem 1rem;
   text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 footer p {
@@ -56,5 +57,6 @@ nav a {
 
 nav a:hover {
   color: #ffcccc;
+  text-decoration: underline;
 }
 </style>
