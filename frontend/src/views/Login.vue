@@ -120,6 +120,7 @@ export default {
   width: 100%;
   max-width: 440px;
   padding: 2rem;
+  background: #f8f8f8;
 }
 
 /* En-tête */

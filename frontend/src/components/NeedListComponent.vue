@@ -25,7 +25,7 @@ export default {
           client_name: "Jean Dupont",
           description: "Développement d'une application mobile pour la gestion de projet",
           competence_type: "Développement mobile",
-          created_at: "2025-02-13T14:30:00Z",
+          created_at: "2025-01-13T14:30:00Z",
           status: "Disponible"
         },
         {

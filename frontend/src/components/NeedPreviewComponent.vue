@@ -2,12 +2,17 @@
   <div class="need-preview">
     <h2 class="description">{{ Need.description }}</h2>
     <p class="competence">{{ Need.competence_type }}</p>
+
     <div class="info">
       <div>
         <span class="client-name">Par {{ Need.client_name }}, </span>
         <span class="created-at">le {{ formattedDate }}</span>
       </div>
-      <span :class="['status', Need.status.toLowerCase()]">{{ Need.status }}</span>
+
+      <div class="tags">
+        <span v-if="isRecent" class="new-tag">Nouveau</span>
+        <span :class="['status', Need.status.toLowerCase()]">{{ Need.status }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -22,7 +27,6 @@ export default {
     }
   },
   computed: {
-    // Formater la date en utilisant l'objet Date pour un affichage lisible
     formattedDate() {
       const date = new Date(this.Need.created_at);
       return date.toLocaleDateString('fr-FR', {
@@ -30,6 +34,13 @@ export default {
         month: 'short',
         day: 'numeric'
       });
+    },
+    isRecent() {
+      const createdDate = new Date(this.Need.created_at);
+      const currentDate = new Date();
+      const diffTime = currentDate - createdDate;
+      const diffDays = diffTime / (1000 * 60 * 60 * 24);
+      return diffDays < 14; // Moins de 14 jours
     }
   }
 }
@@ -71,7 +82,6 @@ export default {
 .info {
   display: flex;
   justify-content: space-between;
-
   align-items: center;
 }
 
@@ -81,6 +91,11 @@ export default {
 
 .client-name {
   color: #555;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
 }
 
 .status {
@@ -97,5 +112,13 @@ export default {
 .status.indisponible {
   background-color: red;
   color: white;
+}
+
+.new-tag {
+  background-color: rgb(33, 126, 126);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 </style>
