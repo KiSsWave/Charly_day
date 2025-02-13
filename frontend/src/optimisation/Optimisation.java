@@ -1,6 +1,5 @@
 package optimisation;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -20,25 +19,20 @@ public class Optimisation {
      */
     public static List<Besoin> chargerBesoins(String fichier) {
         List<Besoin> besoins = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fichier))) {
-            String line;
-            boolean lireBesoins = false;
+        boolean lireBesoins = false;
+        String[] lines = fichier.split("\n");
 
-            while ((line = br.readLine()) != null) {
-                if (line.contains("besoins")) {
-                    lireBesoins = true;
-                    continue;
-                }
-                if (line.isEmpty()) break; // Ligne vide = fin des besoins
-
-                if (lireBesoins) {
-                    String[] parts = line.split(";");
-                    if (parts.length < 3) continue;
-                    besoins.add(new Besoin(Integer.parseInt(parts[0]), parts[1], parts[2]));
-                }
+        for (String line : lines) {
+            if (line.contains("besoins")) {
+                lireBesoins = true;
+                continue;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (line.isEmpty()) break;
+            if (lireBesoins) {
+                String[] parts = line.split(";");
+                if (parts.length < 3) continue;
+                besoins.add(new Besoin(Integer.parseInt(parts[0]), parts[1], parts[2]));
+            }
         }
         return besoins;
     }
@@ -53,28 +47,22 @@ public class Optimisation {
      */
     public static Map<String, Salarie> chargerCompetences(String fichier) {
         Map<String, Salarie> salaries = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fichier))) {
-            String line;
-            boolean lireCompetences = false;
+        boolean lireCompetences = false;
+        String[] lines = fichier.split("\n");
 
-            while ((line = br.readLine()) != null) {
-                if (line.contains("competences")) {
-                    lireCompetences = true;
-                    continue;
-                }
-                if (!lireCompetences) continue;
-
-                String[] parts = line.split(";");
-                if (parts.length < 4) continue;
-                String nom = parts[1];
-                String competence = parts[2];
-                int interet = Integer.parseInt(parts[3]);
-
-                salaries.putIfAbsent(nom, new Salarie(nom));
-                salaries.get(nom).ajouterCompetence(competence, interet);
+        for (String line : lines) {
+            if (line.contains("competences")) {
+                lireCompetences = true;
+                continue;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (!lireCompetences) continue;
+            String[] parts = line.split(";");
+            if (parts.length < 4) continue;
+            String nom = parts[1];
+            String competence = parts[2];
+            int interet = Integer.parseInt(parts[3]);
+            salaries.putIfAbsent(nom, new Salarie(nom));
+            salaries.get(nom).ajouterCompetence(competence, interet);
         }
         return salaries;
     }
@@ -127,30 +115,28 @@ public class Optimisation {
     }
 
     /**
-     * Exporte l'affectation des salariés aux besoins dans un fichier texte.
-     * Le fichier contient le score total en première ligne, puis les affectations ligne par ligne.
+     * Génère une affectation sous forme de chaîne CSV.
+     * Le CSV contient le score en première ligne suivi des affectations.
      *
-     * @param fichier Le chemin vers le fichier de sortie.
      * @param affectation Une map représentant l'affectation des salariés aux besoins.
      * @param besoins Une liste des besoins.
      * @param score Le score calculé pour cette affectation.
+     * @return Une chaîne représentant le fichier CSV.
      */
-    public static void exporterAffectation(String fichier, Map<String, Integer> affectation, List<Besoin> besoins, int score) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fichier))) {
-            writer.write(score + "\n"); // Première ligne avec le score
-            for (Map.Entry<String, Integer> entry : affectation.entrySet()) {
-                String salarie = entry.getKey();
-                int idBesoin = entry.getValue();
-                Besoin besoin = besoins.stream().filter(b -> b.getId() == idBesoin).findFirst().orElse(null);
-                if (besoin != null) {
-                    writer.write(salarie + ";" + besoin.getType() + ";" + besoin.getClient() + "\n");
-                }
-            }
-            System.out.println("Résultat exporté dans : " + fichier);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static String exporterAffectation(Map<String, Integer> affectation, List<Besoin> besoins, int score) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(score).append("\n"); // Ajouter le score en première ligne
+
+        for (Map.Entry<String, Integer> entry : affectation.entrySet()) {
+            String salarie = entry.getKey();
+            int idBesoin = entry.getValue();
+            besoins.stream().filter(b -> b.getId() == idBesoin).findFirst().ifPresent(besoin -> sb.append(salarie).append(";").append(besoin.getType()).append(";").append(besoin.getClient()).append("\n"));
+
         }
+
+        return sb.toString(); // Retourne le CSV sous forme de String
     }
+
 
     /**
      * Applique un algorithme génétique pour trouver la meilleure affectation possible en un certain nombre de générations.
