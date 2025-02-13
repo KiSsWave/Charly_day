@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use charly\application\action\CreateNeedAction;
+use charly\application\action\CreateUnauthNeedAction;
+use charly\application\action\GetUserNeedsAction;
 use charly\application\action\RegisterAction;
 use charly\application\action\SignInAction;
 use charly\application\middleware\AuthnMiddleware;
@@ -126,13 +128,16 @@ return [
     CreateNeedAction::class => function (ContainerInterface $c) {
         return new CreateNeedAction($c->get(NeedServiceInterface::class));
     },
-
     CreateSalarieAction::class => function (ContainerInterface $c) {
     return new CreateSalarieAction($c->get(SalarieServiceInterface::class));
     },
 
     GetSalariesAction::class => function (ContainerInterface $c) {
     return new GetSalariesAction($c->get(SalarieServiceInterface::class));
+    },
+
+    GetUserNeedsAction::class => function (ContainerInterface $c) {
+        return new GetUserNeedsAction($c->get(NeedServiceInterface::class));
     },
 
 

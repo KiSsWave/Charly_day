@@ -15,8 +15,16 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/needs', charly\application\action\CreateNeedAction::class);
     $app->post('/salaries' , \charly\application\action\CreateSalarieAction::class);
     $app->get('/salaries' , \charly\application\action\GetSalariesAction::class);
+    $app->post('/needs/anonymous', charly\application\action\CreateUnauthNeedAction::class);
+    $app->get('/needs/anonymous', charly\application\action\GetUnauthNeedsAction::class);
+
+
+    $app->group('user', function () use ($app) {
+        $app->post('/needs', charly\application\action\CreateNeedAction::class)->add(charly\application\middleware\AuthzUserMiddleware::class);
+        $app->get('/needs', charly\application\action\GetUserNeedsAction::class)->add(charly\application\middleware\AuthzUserMiddleware::class);
+    })->add(charly\application\middleware\AuthnMiddleware::class);
+
 
     return $app;
+
 };
-
-

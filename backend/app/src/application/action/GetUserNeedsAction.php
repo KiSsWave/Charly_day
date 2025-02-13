@@ -2,14 +2,13 @@
 
 namespace charly\application\action;
 
-use charly\core\dto\NeedDTO;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use charly\core\services\need\NeedServiceInterface;
 use Slim\Exception\HttpBadRequestException;
 
-class CreateNeedAction extends AbstractAction
+class GetUserNeedsAction extends AbstractAction
 {
     private NeedServiceInterface $needService;
 
@@ -20,24 +19,18 @@ class CreateNeedAction extends AbstractAction
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
-        $data = $rq->getParsedBody();
-        $description = $data['description'] ?? null;
-        $competence_type = $data['competence_type'] ?? null;
-
-        $client = $rq->getAttribute('user');
-        $client_name = $client->getEmail();
-
-        if (!$client_name || !$description || !$competence_type) {
-            throw new HttpBadRequestException($rq, "Données manquantes");
+        $user = $rq->getAttribute('user');
+        if (!$user) {
+            throw new HttpBadRequestException($rq, "Utilisateur non authentifié");
         }
 
         try {
-            $id = $this->needService->createNeed($client_name, $description, $competence_type);
+            $needs = $this->needService->findByClientNameNeed($user->getEmail());
 
             $rs->getBody()->write(json_encode([
-                'need_id' => $id
+                'needs' => $needs
             ]));
-            return $rs->withHeader('Content-Type', 'application/json')->withStatus(201);
+            return $rs->withHeader('Content-Type', 'application/json')->withStatus(200);
 
         } catch(Exception $e) {
             $rs->getBody()->write(json_encode([
