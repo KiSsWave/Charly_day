@@ -67,14 +67,17 @@ export default {
       this.error = null;
 
       try {
-        // Appel API à implémenter
-        const response = await this.$http.post("/api/auth/login", this.form);
+        const response = await fetch("http://localhost:49050/signing", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.form),
+        });
 
-        // Stocker le token
         const { token } = response.data;
         localStorage.setItem("token", token);
 
-        // Rediriger vers la page d'accueil
         this.$router.push({ name: "home" });
       } catch (error) {
         this.error =

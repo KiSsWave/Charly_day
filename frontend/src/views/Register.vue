@@ -7,10 +7,10 @@
 
       <form class="auth-form" @submit.prevent="handleRegister">
         <div class="form-group">
-          <label class="form-label" for="name">Nom complet</label>
+          <label class="form-label" for="login">Nom complet</label>
           <input
-            id="name"
-            v-model="form.name"
+            id="login"
+            v-model="form.login"
             type="text"
             class="form-input"
             placeholder="Nom complet"
@@ -48,7 +48,7 @@
           >
           <input
             id="password_confirmation"
-            v-model="form.password_confirmation"
+            v-model="password_confirmation"
             type="password"
             class="form-input"
             placeholder="Confirmation du mot de passe"
@@ -79,18 +79,18 @@ export default {
   data() {
     return {
       form: {
-        name: "",
+        login: "",
         email: "",
         password: "",
-        password_confirmation: "",
       },
+      password_confirmation: "",
       isLoading: false,
       error: null,
     };
   },
   methods: {
     async handleRegister() {
-      if (this.form.password !== this.form.password_confirmation) {
+      if (this.form.password !== this.password_confirmation) {
         this.error = "Les mots de passe ne correspondent pas.";
         return;
       }
@@ -99,10 +99,14 @@ export default {
       this.error = null;
 
       try {
-        const response = await this.$http.post("/api/auth/register", this.form);
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-        this.$router.push({ name: "home" });
+        await fetch("http://localhost:49050/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.form),
+        });
+        this.$router.push({ name: "login" });
       } catch (error) {
         this.error =
           error.response?.data?.message ||
