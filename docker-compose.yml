@@ -47,7 +47,7 @@ services:
     ports:
       - "49053:80"
     volumes:
-      - ./frontend:/var/www/html
+      - ./frontend/dist:/var/www/html
     networks:
       - charly.net
     depends_on:
