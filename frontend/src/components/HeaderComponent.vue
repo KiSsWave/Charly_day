@@ -7,8 +7,8 @@
     <nav>
       <ul>
         <li><router-link to="/">Accueil</router-link></li>
+        <li><router-link to="/need/new">Créer un besoin</router-link></li>
         <li><router-link to="/login">Connexion</router-link></li>
-        <li><router-link to="/register">Inscription</router-link></li>
       </ul>
     </nav>
   </header>
@@ -25,7 +25,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: red;
+  background-color: #b10e0e;
   padding: 1rem 2rem;
   color: white;
 }
@@ -62,7 +62,7 @@ nav ul {
 nav a {
   color: white;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: larger;
   transition: color 0.3s;
 }
 
