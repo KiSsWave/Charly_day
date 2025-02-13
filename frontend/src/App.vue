@@ -1,5 +1,6 @@
 <script setup>
 import SecretComponent from './components/SecretComponent.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>

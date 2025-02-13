@@ -4,6 +4,19 @@
       <img src="@/assets/charly_list.png" alt="Charly qui montre une liste">
       <h1>Vos besoins</h1>
     </div>
+
+    <!-- Affichage du message de chargement -->
+    <p v-if="loading">Chargement des besoins...</p>
+
+    <!-- Affichage du message d'erreur -->
+    <p v-if="error" class="error">{{ error }}</p>
+
+    <!-- Affichage du message si aucun besoin -->
+    <p v-if="!loading && needs.length === 0" class="empty-message">
+      Vous n'avez aucun besoin pour l'instant.
+    </p>
+
+    <!-- Affichage des besoins -->
     <div v-for="(need, index) in needs" :key="index">
       <NeedPreview :Need="need" />
     </div>
@@ -12,6 +25,8 @@
 
 <script>
 import NeedPreview from './NeedPreviewComponent.vue';
+import axios from '../api/index.js';
+import {isAuthenticated} from '@/services/authProvider.js';
 
 export default {
   name: 'NeedList',
@@ -20,36 +35,36 @@ export default {
   },
   data() {
     return {
-      needs: [
-        {
-          client_name: "Jean Dupont",
-          description: "Développement d'une application mobile pour la gestion de projet",
-          competence_type: "Développement mobile",
-          created_at: "2025-01-13T14:30:00Z",
-          status: "Disponible"
-        },
-        {
-          client_name: "Sophie Martin",
-          description: "Création d'un site web de e-commerce",
-          competence_type: "Web design et développement",
-          created_at: "2025-02-10T09:00:00Z",
-          status: "Indisponible"
-        },
-        {
-          client_name: "Pierre Lefevre",
-          description: "Mise en place d'une solution ERP",
-          competence_type: "Gestion des systèmes d'information",
-          created_at: "2025-02-12T11:45:00Z",
-          status: "Disponible"
-        }
-      ]
+      needs: [],  // Tableau vide par défaut
+      loading: true, // Indicateur de chargement
+      error: null   // Gestion des erreurs
     };
+  },
+  mounted() {
+    this.fetchNeeds();
+  },
+  methods: {
+    async fetchNeeds() {
+      try {
+        if(!isAuthenticated()) {
+          const response = await axios.get('/needs/anonymous');  // Requête Axios
+          this.needs = response.data; // Stockage des besoins
+        } else {
+          const response = await axios.get('/needs');  // Requête Axios
+          this.needs = response.data; // Stockage des besoins
+        }
+      } catch (err) {
+        this.error = "Erreur lors du chargement des besoins.";
+        console.error("Erreur Axios:", err);
+      } finally {
+        this.loading = false; // Fin du chargement
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-
 .title {
   display: flex;
   justify-content: center;
@@ -59,7 +74,6 @@ export default {
 
 .title img {
   height: 150px;
-
 }
 
 .title h1 {
@@ -81,5 +95,18 @@ export default {
   font-size: 1em;
   color: #ffffff;
   margin-bottom: 20px;
+}
+
+.error {
+  color: yellow;
+  font-weight: bold;
+  text-align: center;
+}
+
+.empty-message {
+  text-align: center;
+  font-style: italic;
+  color: #ffffff;
+  margin-top: 20px;
 }
 </style>
