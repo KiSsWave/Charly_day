@@ -66,4 +66,3 @@ ALTER TABLE ONLY "public"."needs" ADD CONSTRAINT "fk_needs_users" FOREIGN KEY (c
 ALTER TABLE ONLY "public"."salarie_competence" ADD CONSTRAINT "fk_competence" FOREIGN KEY (competence_id) REFERENCES competences(id) ON DELETE CASCADE NOT DEFERRABLE;
 ALTER TABLE ONLY "public"."salarie_competence" ADD CONSTRAINT "fk_salarie" FOREIGN KEY (salarie_id) REFERENCES salaries(id) ON DELETE CASCADE NOT DEFERRABLE;
 
--- 2025-02-13 19:01:07.94324+00
