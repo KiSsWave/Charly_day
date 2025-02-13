@@ -1,0 +1,6 @@
+
+/backend/app/vendor
+.env
+/.idea
+
+
