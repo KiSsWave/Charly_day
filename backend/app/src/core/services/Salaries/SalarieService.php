@@ -3,6 +3,7 @@
 namespace charly\core\services\Salaries;
 
 use charly\core\domain\Salarie\Salarie;
+use charly\core\dto\CompetenceDTO;
 use charly\core\dto\CreateSalarieDTO;
 use charly\core\dto\SalarieDTO;
 use charly\core\repositoryInterfaces\SalarieRepositoryInterface;
@@ -32,5 +33,21 @@ class SalarieService implements SalarieServiceInterface
             $salariesDTO[] = new SalarieDTO($salarie);
         }
         return $salariesDTO;
+    }
+
+    public function addCompetence(string $nom)
+    {
+        $this->repository->addCompetence($nom);
+    }
+
+    public function deleteCompetence(string $id)
+    {
+        $this->repository->deleteCompetence($id);
+    }
+
+    public function modifCompetence(string $id, string $nom)
+    {
+        $competence = new CompetenceDTO($id, $nom);
+        $this->repository->modifCompetence($competence);
     }
 }
