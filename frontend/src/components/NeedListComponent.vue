@@ -46,13 +46,20 @@ export default {
   methods: {
     async fetchNeeds() {
       try {
-        if(!isAuthenticated()) {
-          const response = await axios.get('/needs/anonymous');  // Requête Axios
-          this.needs = response.data; // Stockage des besoins
+        this.loading = true;
+        let response;
+
+        if (!isAuthenticated()) {
+          // Si l'utilisateur n'est pas authentifié, on appelle l'endpoint correspondant
+          response = await axios.get('/needs/anonymous');
         } else {
-          const response = await axios.get('/needs');  // Requête Axios
-          this.needs = response.data; // Stockage des besoins
+          // Si l'utilisateur est authentifié, on appelle l'endpoint général
+          response = await axios.get('/needs');
         }
+
+        // Accès au tableau 'needs' dans la réponse
+        this.needs = response.data.needs;
+
       } catch (err) {
         this.error = "Erreur lors du chargement des besoins.";
         console.error("Erreur Axios:", err);
@@ -63,6 +70,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .title {
