@@ -16,8 +16,8 @@ const secrets = [
     code: ["b", "a", "s", "s", "e", "m"],
     content: "iframe",
     src: "https://www.youtube.com/embed/3f8LGyeDynE?autoplay=1",
-    position: { top: "20%", left: "20%" }, // Position plus basse à gauche
-    size: { width: "560px", height: "315px" } // Taille différente
+    position: { top: "50%", right: "0%" }, // Position plus basse à gauche
+    size: { width: "430px", height: "920px" } // Taille différente
   },
   {
     name: "bismillah",
