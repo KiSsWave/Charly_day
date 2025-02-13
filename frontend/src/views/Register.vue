@@ -106,9 +106,6 @@ export default {
         return;
       }
 
-      this.isLoading = true;
-      this.error = null;
-
       try {
         await axios.post("/register", this.form);
         this.$router.push({ name: "login" });
@@ -116,8 +113,6 @@ export default {
         this.error =
           error.response?.data?.message ||
           "Une erreur est survenue lors de la création du compte.";
-      } finally {
-        this.isLoading = false;
       }
     },
     login() {
