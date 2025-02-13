@@ -22,15 +22,21 @@ export default {
   padding: 20px;
   background-color: #f3f3f3;
   border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-menu h2 {
   text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
 }
 
 .admin-menu nav ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  justify-content: space-around;
 }
 
 .admin-menu nav ul li {

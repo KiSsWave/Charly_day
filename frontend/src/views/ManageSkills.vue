@@ -1,13 +1,15 @@
 <template>
   <div class="manage-skills">
-    <h2>Gérer une compétence</h2>
-    <form @submit.prevent="manageSkill">
-      <div>
-        <label for="skill">Compétence</label>
-        <input type="text" id="skill" v-model="skill.name" required />
-      </div>
-      <button type="submit">Ajouter la compétence</button>
-    </form>
+    <div class="card">
+      <h2>Gérer une compétence</h2>
+      <form @submit.prevent="manageSkill">
+        <div class="form-group">
+          <label for="skill">Compétence</label>
+          <input type="text" id="skill" v-model="skill.name" required />
+        </div>
+        <button type="submit">Ajouter la compétence</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -26,8 +28,9 @@ export default {
   methods: {
     async manageSkill() {
       try {
-        await axios.post('/skills', this.skill);
-        alert("Compétence ajoutée avec succès");
+        await axios.post('/competences', this.skill);
+        alert("Compétence ajoutée avec succès !");
+        this.skill.name = ''; // Réinitialise le champ après l'ajout
       } catch (error) {
         console.error("Erreur lors de l'ajout de la compétence : ", error);
       }
@@ -38,32 +41,68 @@ export default {
 
 <style scoped>
 .manage-skills {
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
 }
 
-.manage-skills h2 {
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
   text-align: center;
 }
 
-.manage-skills form {
-  max-width: 400px;
-  margin: 0 auto;
+h2 {
+  color: #333;
+  margin-bottom: 20px;
 }
 
-.manage-skills form div {
-  margin-bottom: 10px;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
 
-.manage-skills form button {
-  background-color: #007bff;
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #e71e1e;
+  outline: none;
+}
+
+button {
+  background: #e71e1e;
   color: white;
-  padding: 10px 20px;
+  font-size: 16px;
+  padding: 12px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 5px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 15px;
+  width: 100%;
 }
 
-.manage-skills form button:hover {
-  background-color: #0056b3;
+button:hover {
+  background: #b10e0e;
+  transform: scale(1.05);
 }
 </style>

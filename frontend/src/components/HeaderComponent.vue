@@ -10,7 +10,7 @@
         <li><router-link to="/need/new">Créer un besoin</router-link></li>
         <li v-if="!isAuthenticated"><router-link to="/login">Connexion</router-link></li>
         <li v-else>
-          <button @click="_logout">Déconnexion</button>
+          <button @click="logingout">Déconnexion</button>
         </li>
       </ul>
     </nav>
@@ -36,14 +36,14 @@ export default {
       router.push({ path: '/' });
     };
 
-    const _logout = () => {
+    const logingout = () => {
       logout;
       router.push('/');
     };
 
     return {
       isAuthenticated: authenticated,
-      _logout,
+      logingout,
       goToHome
     };
   }

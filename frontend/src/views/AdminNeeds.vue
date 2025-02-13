@@ -20,7 +20,7 @@
 import axios from '@/api/index.js';
 
 export default {
-  name: "ShowNeeds",
+  name: "AdminNeeds",
   data() {
     return {
       needs: [],
@@ -32,8 +32,8 @@ export default {
   methods: {
     async fetchNeeds() {
       try {
-        const response = await axios.get('/needs');
-        this.needs = response.data;
+        const response = await axios.get('/admin/needs');
+        this.needs = response.data.needs;
       } catch (error) {
         console.error("Erreur de chargement des besoins : ", error);
       }

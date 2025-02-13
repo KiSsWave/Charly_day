@@ -4,7 +4,7 @@ use DI\ContainerBuilder;
 use Dotenv\Dotenv;
 use Slim\Factory\AppFactory;
 
-$dotenv = Dotenv::createImmutable(__DIR__ , ['.env','dbconnexion.env']);
+$dotenv = Dotenv::createImmutable(__DIR__ , ['.env','dbconnexion.env','mail.env']);
 $dotenv->load();
 $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/settings.php' );
