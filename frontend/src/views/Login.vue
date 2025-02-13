@@ -52,6 +52,7 @@
 import FooterComponent from '@/components/FooterComponent.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import axios from '../api/index.js';
+import { setToken, setRole } from '../services/authProvider';
 
 export default {
   name: "LoginView",
@@ -65,29 +66,23 @@ export default {
         email: "",
         password: "",
       },
-      isLoading: false,
-      error: null,
+
     };
   },
 
   methods: {
     async handleLogin() {
-      this.isLoading = true;
-      this.error = null;
-
       try {
         const response = await axios.post("/signin", this.form);
-
-        const { token } = response.data;
-        localStorage.setItem("token", token);
-
+        const { token } = response.data.token;
+        const {role}=response.data.role;
+        setToken(token);
+        setRole(role);
         this.$router.push({ name: "home" });
       } catch (error) {
         this.error =
           error.response?.data?.message ||
           "Une erreur est survenue lors de la connexion.";
-      } finally {
-        this.isLoading = false;
       }
     },
     register() {
