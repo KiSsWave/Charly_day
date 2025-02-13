@@ -14,6 +14,8 @@ use charly\core\repositoryInterfaces\UserRepositoryInterface;
 use charly\core\services\auth\AuthnService;
 use charly\core\services\auth\AuthnServiceInterface;
 use charly\core\services\auth\AuthzService;
+use charly\core\services\auth\AuthzServiceInterface;
+use charly\infrastructure\repositories\UserRepository;
 use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
 use charly\application\middleware\CorsMiddleware;
@@ -29,7 +31,7 @@ return [
 
     'db.config' => function () {
         return [
-            'dsn' => "pgsql:host=" . $_ENV['DB_HOST'] . ";port=" . $_ENV['DB_PORT'] . ";dbname=boz",
+            'dsn' => "pgsql:host=" . $_ENV['DB_HOST'] . ";port=" . $_ENV['DB_PORT'] . ";dbname=charly",
             'user' => $_ENV['DB_USER'],
             'password' => $_ENV['DB_PASSWORD'],
         ];
@@ -61,10 +63,6 @@ return [
       return new UserRepository($c->get(PDO::class));
     },
 
-    TicketRepositoryInterface::class => function(ContainerInterface $c){
-    return new TicketRepository($c->get(PDO::class));
-    },
-
     AuthnServiceInterface::class => function (ContainerInterface $c){
         return new AuthnService($c->get(UserRepositoryInterface::class));
     },
@@ -75,14 +73,6 @@ return [
 
     AuthzServiceInterface::class => function (ContainerInterface $c) {
         return new AuthzService($c->get(UserRepositoryInterface::class));
-    },
-
-    BlockServiceInterface::class =>function(ContainerInterface $c){
-      return new BlockService($c->get(BlockRepositoryInterface::class));
-    },
-
-    TicketServiceInterface::class =>function(ContainerInterface $c){
-    return new TicketService($c->get(TicketRepositoryInterface::class));
     },
 
     AuthnMiddleware::class =>function (ContainerInterface $c){
@@ -97,9 +87,6 @@ return [
         return new AuthzAdminMiddleware($c->get(AuthzServiceInterface::class));
     },
 
-    AuthzVendeurMiddleware::class =>function (ContainerInterface $c){
-        return new AuthzVendeurMiddleware($c->get(AuthzServiceInterface::class));
-    },
 
     SignInAction::class => function (ContainerInterface $c){
         return new SignInAction($c->get(AuthnProviderInterface::class));
@@ -109,38 +96,5 @@ return [
         return new RegisterAction($c->get(AuthnProviderInterface::class));
     },
 
-    GetBalanceAction::class => function (ContainerInterface $container) {
-        return new GetBalanceAction($container->get(BlockServiceInterface::class));
-    },
 
-    GetHistoryAction::class => function (ContainerInterface $container) {
-        return new GetHistoryAction($container->get(BlockServiceInterface::class));
-    },
-
-    AddTicketAction::class => function (ContainerInterface $c){
-    return new AddTicketAction($c->get(TicketServiceInterface::class));
-    },
-
-    GetTicketByAdminIdAction::class => function (ContainerInterface $c){
-    return new GetTicketByAdminIdAction($c->get(TicketServiceInterface::class));
-    },
-
-    TakeTicketByAdminAction::class => function(ContainerInterface $c){
-    return new TakeTicketByAdminAction($c->get(TicketServiceInterface::class));
-    },
-
-    CloseTicketAction::class => function (ContainerInterface $c){
-        return new CloseTicketAction($c->get(TicketServiceInterface::class));
-    },
-
-    GetTicketByUserIdAction::class => function (ContainerInterface $c) {
-        return new GetTicketByUserIdAction($c->get(TicketServiceInterface::class));
-    },
-    CreateFactureAction::class => function (ContainerInterface $container) {
-        return new CreateFactureAction($container->get(BlockServiceInterface::class));
-    },
-
-    PayFactureAction::class => function (ContainerInterface $container) {
-        return new PayFactureAction($container->get(BlockServiceInterface::class));
-    },
 ];
