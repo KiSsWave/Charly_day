@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use charly\application\action\CreateNeedAction;
 use charly\application\action\RegisterAction;
 use charly\application\action\SignInAction;
 use charly\application\middleware\AuthnMiddleware;
@@ -10,11 +11,15 @@ use charly\application\middleware\AuthzAdminMiddleware;
 use charly\application\providers\AuthnProviderInterface;
 use charly\application\providers\JWTAuthnProvider;
 use charly\application\providers\JWTManager;
+use charly\core\repositoryInterfaces\NeedRepositoryInterface;
 use charly\core\repositoryInterfaces\UserRepositoryInterface;
 use charly\core\services\auth\AuthnService;
 use charly\core\services\auth\AuthnServiceInterface;
 use charly\core\services\auth\AuthzService;
 use charly\core\services\auth\AuthzServiceInterface;
+use charly\core\services\need\NeedService;
+use charly\core\services\need\NeedServiceInterface;
+use charly\infrastructure\repositories\NeedRepository;
 use charly\infrastructure\repositories\UserRepository;
 use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
@@ -94,6 +99,18 @@ return [
 
     RegisterAction::class => function (ContainerInterface $c){
         return new RegisterAction($c->get(AuthnProviderInterface::class));
+    },
+
+    NeedRepositoryInterface::class => function(ContainerInterface $c) {
+        return new NeedRepository($c->get(PDO::class));
+    },
+
+    NeedServiceInterface::class => function (ContainerInterface $c) {
+        return new NeedService($c->get(NeedRepositoryInterface::class));
+    },
+
+    CreateNeedAction::class => function (ContainerInterface $c) {
+        return new CreateNeedAction($c->get(NeedServiceInterface::class));
     },
 
 

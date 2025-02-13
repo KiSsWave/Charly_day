@@ -12,6 +12,8 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/signin', charly\application\action\SignInAction::class);
     $app->post('/register', charly\application\action\RegisterAction::class);
 
+    $app->post('/needs', charly\application\action\CreateNeedAction::class);
+
     return $app;
 };
 

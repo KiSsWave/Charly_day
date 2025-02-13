@@ -11,5 +11,14 @@ CREATE TABLE "public"."users" (
 ) WITH (oids = false);
 
 
+CREATE TABLE "public"."needs" (
+                                          "id" uuid NOT NULL,
+                                          "client_name" character varying(100) NOT NULL,
+                                          "description" text NOT NULL,
+                                          "competence_type" character varying(50) NOT NULL,
+                                          "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+                                          "status" character varying(20) DEFAULT 'en attente',
+                                          CONSTRAINT "service_needs_pkey" PRIMARY KEY ("id")
+) WITH (oids = false);
 
 
