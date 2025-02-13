@@ -1,0 +1,54 @@
+networks:
+  charly.net:
+    driver: bridge
+
+services:
+  api:
+    image: canals/php:latest
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: ./build/Dockerfile
+    env_file: ./backend/app/config/token.env
+    ports:
+      - '49050:80'
+    volumes:
+      - ./backend/app:/var/php
+    working_dir: /var/php
+    networks:
+      - charly.net
+    depends_on:
+      - postgres
+    command: php -S 0.0.0.0:80 -t /var/php/public
+
+  postgres:
+    image: 'postgres:latest'
+    restart: unless-stopped
+    env_file: ./backend/app/config/postgres.env
+    ports:
+      - '49051:5432'
+    networks:
+      - charly.net
+    volumes:
+      - ./backend/app/sql:/var/sql
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - '49052:8080'
+    networks:
+      - charly.net
+    command: php -S 0.0.0.0:8080 -t /var/www/html
+
+  apache2:
+    image: ubuntu/apache2:latest
+    restart: unless-stopped
+    ports:
+      - "49053:80"
+    volumes:
+      - ./frontend:/var/www/html
+    networks:
+      - charly.net
+    depends_on:
+      - api

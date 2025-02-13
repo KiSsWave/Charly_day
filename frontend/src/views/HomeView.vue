@@ -1,47 +1,48 @@
-<script setup>
-import { ref, onMounted } from "vue";
-
-const iframeVisible = ref(false);
-const konamiCode = [
-  "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
-  "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
-  "b", "a"
-];
-let userInput = [];
-
-onMounted(() => {
-  window.addEventListener("keydown", (event) => {
-    userInput.push(event.key);
-
-    if (userInput.join("").toLowerCase().includes(konamiCode.join("").toLowerCase())) {
-      iframeVisible.value = true;
-    }
-
-    if (userInput.length > konamiCode.length) {
-      userInput.shift();
-    }
-  });
-});
-</script>
-
 <template>
-  <div class="wrapper">
-    <iframe
-      v-if="iframeVisible"
-      src="https://subway-surfers.org/berlin/"
-      style="border: none;"
-    ></iframe>
+  <HeaderComponent />
+  <div class="home">
   </div>
+  <FooterComponent />
 </template>
 
-<style scoped>
-.wrapper {
-  width: 100%;
-  height: 100dvh;
+<script>
+import FooterComponent from '@/components/FooterComponent.vue'
+import HeaderComponent from '@/components/HeaderComponent.vue'
+
+export default {
+  name: 'HomeView',
+  components: {
+    FooterComponent,
+    HeaderComponent
+  }
+}
+</script>
+
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
-iframe {
-  width: 100%;
-  height: 100dvh;
+header {
+  height: 60px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+footer {
+  height: 60px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 60px - 60px - 10px - 10px);
+  font-size: 2rem;
+  padding: 20px;
+  box-sizing: border-box;
 }
 </style>
