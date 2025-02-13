@@ -6,3 +6,4 @@
 
 backend/app/config/token.env
 *.env
+backend/app/composer.lock
