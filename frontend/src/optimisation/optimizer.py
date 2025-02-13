@@ -1,70 +1,86 @@
+# Initialisation de la population
 import random
 
-def affectation_optimisee(besoins_list, salaries_dict):
-    """
-    Algorithme amélioré avec phase de correction :
-    - Fait une affectation initiale gloutonne.
-    - Réajuste en explorant des échanges pour maximiser le score.
-    """
+from src.optimisation.scoring import calculer_score
 
-    # Initialisation
-    random.shuffle(besoins_list)  # Mélange pour tester différentes configurations
-    affectation = {}
-    client_besoins_count = {}  # Suivi du nombre de besoins satisfaits par client
-    salaries_disponibles = set(salaries_dict.keys())
 
-    # PHASE 1 : Affectation Gloutonne
-    for besoin in besoins_list:
-        meilleur_salarie = None
-        meilleur_interet = -1
+def generer_population(taille_population, besoins_list, salaries_dict):
+    population = []
+    for _ in range(taille_population):
+        affectation = {}
+        salaries_disponibles = list(salaries_dict.keys())
+        random.shuffle(salaries_disponibles)
+        random.shuffle(besoins_list)
 
-        for salarie_nom in salaries_disponibles:
-            salarie = salaries_dict[salarie_nom]
-            if besoin.type in salarie.competences:
-                interet = salarie.competences[besoin.type]
+        for besoin in besoins_list:
+            for salarie in salaries_disponibles:
+                if besoin.type in salaries_dict[salarie].competences:
+                    affectation[salarie] = besoin.id
+                    salaries_disponibles.remove(salarie)
+                    break
 
-                # Appliquer malus dégressif
-                malus = client_besoins_count.get(besoin.client, 0)
-                score_potentiel = interet - malus
+        population.append(affectation)
 
-                if score_potentiel > meilleur_interet:
-                    meilleur_salarie = salarie_nom
-                    meilleur_interet = score_potentiel
+    return population
 
-        if meilleur_salarie:
-            affectation[meilleur_salarie] = besoin.id
-            salaries_disponibles.remove(meilleur_salarie)
-            client_besoins_count[besoin.client] = client_besoins_count.get(besoin.client, 0) + 1
+# Sélection par tournoi (évite la stagnation)
+def selection(population, besoins_list, salaries_dict, top_k=10):
+    scores = [(individu, calculer_score(individu, besoins_list, salaries_dict)) for individu in population]
+    scores.sort(key=lambda x: x[1], reverse=True)
 
-    # PHASE 2 : Amélioration de l'affectation (Échanges pour améliorer le score)
-    amelioration = True
-    while amelioration:
-        amelioration = False
-        for s1 in affectation:
-            for s2 in affectation:
-                if s1 != s2:
-                    # Tester un échange
-                    besoin_s1 = affectation[s1]
-                    besoin_s2 = affectation[s2]
+    # Sélection par tournoi entre les top_k meilleurs individus
+    return [random.choice(scores[:top_k])[0] for _ in range(top_k)]
 
-                    if besoin_s1 in [b.id for b in besoins_list] and besoin_s2 in [b.id for b in besoins_list]:
-                        type_s1 = next(b.type for b in besoins_list if b.id == besoin_s1)
-                        type_s2 = next(b.type for b in besoins_list if b.id == besoin_s2)
 
-                        if type_s1 in salaries_dict[s2].competences and type_s2 in salaries_dict[s1].competences:
-                            # Vérifier si l'échange améliore le score
-                            interet_s1 = salaries_dict[s1].competences[type_s2]
-                            interet_s2 = salaries_dict[s2].competences[type_s1]
+# Croisement amélioré
+def croisement(parent1, parent2):
+    enfant1, enfant2 = {}, {}
 
-                            malus_s1 = client_besoins_count.get(next(b.client for b in besoins_list if b.id == besoin_s1), 0)
-                            malus_s2 = client_besoins_count.get(next(b.client for b in besoins_list if b.id == besoin_s2), 0)
+    # Sélectionner au hasard une partie des assignations de chaque parent
+    for key in parent1.keys():
+        if random.random() < 0.5:
+            enfant1[key] = parent1[key]
+            enfant2[key] = parent2.get(key, None)
+        else:
+            enfant1[key] = parent2.get(key, None)
+            enfant2[key] = parent1[key]
 
-                            score_avant = salaries_dict[s1].competences[type_s1] - malus_s1 + salaries_dict[s2].competences[type_s2] - malus_s2
-                            score_apres = interet_s1 - malus_s1 + interet_s2 - malus_s2
+    return enfant1, enfant2
 
-                            if score_apres > score_avant:
-                                # Faire l'échange
-                                affectation[s1], affectation[s2] = affectation[s2], affectation[s1]
-                                amelioration = True
+# Mutation intelligente
+def mutation(affectation, besoins_list, salaries_dict, prob=0.3):
+    if random.random() < prob:
+        salaries = list(affectation.keys())
+        if len(salaries) > 1:
+            s1, s2 = random.sample(salaries, 2)
+            if s1 in affectation and s2 in affectation:
+                # Vérification si l'échange améliore le score
+                besoin_s1 = affectation[s1]
+                besoin_s2 = affectation[s2]
 
+                type_s1 = next(b.type for b in besoins_list if b.id == besoin_s1)
+                type_s2 = next(b.type for b in besoins_list if b.id == besoin_s2)
+
+                if type_s1 in salaries_dict[s2].competences and type_s2 in salaries_dict[s1].competences:
+                    affectation[s1], affectation[s2] = affectation[s2], affectation[s1]
     return affectation
+
+# Algorithme génétique évolué
+def algorithme_genetique(besoins_list, salaries_dict, generations=100, population_size=30):
+    population = generer_population(population_size, besoins_list, salaries_dict)
+
+    for _ in range(generations):
+        selectionnes = selection(population, besoins_list, salaries_dict)
+        nouvelle_population = selectionnes.copy()
+
+        while len(nouvelle_population) < population_size:
+            p1, p2 = random.sample(selectionnes, 2)
+            e1, e2 = croisement(p1, p2)
+            nouvelle_population.append(mutation(e1, besoins_list, salaries_dict))
+            if len(nouvelle_population) < population_size:
+                nouvelle_population.append(mutation(e2, besoins_list, salaries_dict))
+
+        population = nouvelle_population
+
+    meilleur = selection(population, besoins_list, salaries_dict, top_k=1)[0]
+    return meilleur
