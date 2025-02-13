@@ -43,15 +43,15 @@ class SalarieRepository implements SalarieRepositoryInterface
                 $check->execute(['nom' => $competence['nom']]);
                 $competenceID = $check->fetchColumn();
 
-                if($competenceID) {
-                    $insertCompetence->execute([
-                        'salarie_id' => $salarie->getID(),
-                        'competence_id' => $competence['id'],
-                        'note' => $competence['note']
-                    ]);
-                }else{
-                    throw new Exception("La compétence '{$competence['nom']}' n'existe pas.");
+                if(!$competenceID) {
+                    $this->addCompetence($competence['nom']);
                 }
+
+                $insertCompetence->execute([
+                    'salarie_id' => $salarie->getID(),
+                    'competence_id' => $competence['id'],
+                    'note' => $competence['note']
+                ]);
 
             }
         }
