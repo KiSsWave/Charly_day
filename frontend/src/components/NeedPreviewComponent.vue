@@ -5,8 +5,7 @@
 
     <div class="info">
       <div>
-        <span class="client-name">Par {{ Need.client_name }}, </span>
-        <span class="created-at">le {{ formattedDate }}</span>
+        <span class="client-name">Par {{ Need.client_name }} </span>
       </div>
 
       <div class="tags">
