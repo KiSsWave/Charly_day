@@ -4,3 +4,5 @@
 /.idea
 
 
+backend/app/config/token.env
+*.env
