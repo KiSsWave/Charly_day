@@ -51,6 +51,7 @@
 <script>
 import FooterComponent from '@/components/FooterComponent.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
+import axios from '../api/index.js';
 
 export default {
   name: "LoginView",
@@ -75,13 +76,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await fetch("http://localhost:49050/signing", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(this.form),
-        });
+        const response = await axios.post("/signin", this.form);
 
         const { token } = response.data;
         localStorage.setItem("token", token);
