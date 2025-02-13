@@ -64,8 +64,32 @@ class NeedRepository implements NeedRepositoryInterface {
                 $need['competence_type']
             );
             $serviceNeed->setStatus($need['status']);
-            return $serviceNeed;
-        }, $needs);
+            $serviceNeed->setId($need['id']);
 
+            $needDTO = new NeedDTO($serviceNeed);
+            $needDTO->id = $need['id'];
+
+            return $needDTO;
+        }, $needs);
+    }
+
+    public function update(string $id, string $description, string $competence_type): void
+    {
+        $stmt = $this->pdo->prepare('
+            UPDATE needs 
+            SET description = :description,
+                competence_type = :competence_type
+            WHERE id = :id
+        ');
+
+        $stmt->execute([
+            'id' => $id,
+            'description' => $description,
+            'competence_type' => $competence_type
+        ]);
+
+        if ($stmt->rowCount() === 0) {
+            throw new \RuntimeException("Le besoin n'a pas pu être mis à jour");
+        }
     }
 }

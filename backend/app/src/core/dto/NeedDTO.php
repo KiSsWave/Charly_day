@@ -1,9 +1,10 @@
 <?php
 
 namespace charly\core\dto;
+use AllowDynamicProperties;
 use charly\core\domain\Need\Need;
 
-class NeedDTO extends DTO {
+#[AllowDynamicProperties] class NeedDTO extends DTO {
     public string $client_name;
     public string $description;
     public string $competence_type;

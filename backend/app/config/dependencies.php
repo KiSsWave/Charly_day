@@ -7,6 +7,7 @@ use charly\application\action\CreateUnauthNeedAction;
 use charly\application\action\GetUserNeedsAction;
 use charly\application\action\RegisterAction;
 use charly\application\action\SignInAction;
+use charly\application\action\UpdateNeedAction;
 use charly\application\middleware\AuthnMiddleware;
 use charly\application\middleware\AuthzUserMiddleware;
 use charly\application\middleware\AuthzAdminMiddleware;
@@ -117,6 +118,10 @@ return [
 
     GetUserNeedsAction::class => function (ContainerInterface $c) {
         return new GetUserNeedsAction($c->get(NeedServiceInterface::class));
+    },
+
+    UpdateNeedAction::class => function (ContainerInterface $c) {
+        return new UpdateNeedAction($c->get(NeedServiceInterface::class));
     },
 
 ];
