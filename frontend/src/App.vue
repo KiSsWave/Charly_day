@@ -1,8 +1,10 @@
 <script setup>
+import SecretComponent from './components/SecretComponent.vue';
 </script>
 
 <template>
   <RouterView />
+  <SecretComponent />
 </template>
 
 <style>
