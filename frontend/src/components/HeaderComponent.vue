@@ -1,6 +1,7 @@
 <template>
   <header class="header">
     <div class="logo">
+      <img src="@/assets/logo.png" alt="Charly">
       <h1>Charly</h1>
     </div>
     <nav>
@@ -28,6 +29,18 @@ export default {
   background-color: red;
   padding: 1rem 2rem;
   color: white;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 75px;
+  height: 75px;
+  margin-right: 1rem;
+  border-radius: 50%;
 }
 
 .logo h1 {
