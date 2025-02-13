@@ -3,16 +3,15 @@ networks:
     driver: bridge
 
 services:
-
   api:
     image: canals/php:latest
     restart: unless-stopped
     build:
-      context: ../Charly_day/backend
-      dockerfile: ../Charly_day/backend/build/Dockerfile
-    env_file: ../Charly_day/backend/app/config/token.env
+      context: ./backend
+      dockerfile: ./build/Dockerfile
+    env_file: ./backend/app/config/token.env
     ports:
-      - '44050:80'
+      - '49050:80'
     volumes:
       - ./backend/app:/var/php
     working_dir: /var/php
@@ -22,34 +21,33 @@ services:
       - postgres
     command: php -S 0.0.0.0:80 -t /var/php/public
 
-
   postgres:
     image: 'postgres:latest'
     restart: unless-stopped
-    env_file: ../Charly_day/backend/app/config/postgres.env
+    env_file: ./backend/app/config/postgres.env
     ports:
-      - '44051:5432'
+      - '49051:5432'
     networks:
       - charly.net
     volumes:
-      - ./app/sql:/var/sql
+      - ./backend/app/sql:/var/sql
 
   adminer:
     image: adminer
     restart: unless-stopped
     ports:
-      - '44052:8080'
+      - '49052:8080'
     networks:
       - charly.net
-    command : php -S 0.0.0.0:8080 -t /var/www/html
+    command: php -S 0.0.0.0:8080 -t /var/www/html
 
   apache2:
     image: ubuntu/apache2:latest
     restart: unless-stopped
     ports:
-      - "44053:80"
+      - "49053:80"
     volumes:
-      - ./frontend/:/var/www/html
+      - ./frontend:/var/www/html
     networks:
       - charly.net
     depends_on:
