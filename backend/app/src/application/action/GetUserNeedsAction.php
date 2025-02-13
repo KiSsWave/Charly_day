@@ -25,7 +25,7 @@ class GetUserNeedsAction extends AbstractAction
         }
 
         try {
-            $needs = $this->needService->findByClientNameNeed($user->getLogin());
+            $needs = $this->needService->findByClientNameNeed($user->getEmail());
 
             $rs->getBody()->write(json_encode([
                 'needs' => $needs

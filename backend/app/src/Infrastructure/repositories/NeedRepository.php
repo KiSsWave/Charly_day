@@ -64,6 +64,8 @@ class NeedRepository implements NeedRepositoryInterface {
                 $need['competence_type']
             );
             $serviceNeed->setStatus($need['status']);
+            return $serviceNeed;
         }, $needs);
+
     }
 }
