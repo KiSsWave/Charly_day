@@ -48,7 +48,7 @@ const secrets = [
     code: ["d", "a", "m", "n", "e", "d"],
     content: "iframe", // Utilise un iframe pour intégrer SoundCloud
     src: "https://www.youtube.com/embed/_4MvHGw62CI?autoplay=1",
-    position: { top: "50%", right: "50%", transform: "translate(-50%, -50%)"}, // Pas de position spécifique
+    position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)"}, // Pas de position spécifique
     size: { width: "640px", height: "50%"} // Pas de taille spécifique
   }
 ];
