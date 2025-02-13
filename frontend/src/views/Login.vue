@@ -74,8 +74,8 @@ export default {
     async handleLogin() {
       try {
         const response = await axios.post("/signin", this.form);
-        const { token } = response.data.token;
-        const {role}=response.data.role;
+        const token = response.data.token;
+        const role=response.data.role;
         setToken(token);
         setRole(role);
         this.$router.push({ name: "home" });

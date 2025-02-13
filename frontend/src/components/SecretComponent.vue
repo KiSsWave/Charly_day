@@ -20,14 +20,6 @@ const secrets = [
     size: { width: "430px", height: "920px" } // Taille différente
   },
   {
-    name: "bismillah",
-    code: ["b", "i", "s", "m", "i", "l", "l", "a", "h"],
-    content: "iframe",
-    src: "https://www.youtube.com/embed/KuC7FFdIaQg?autoplay=1",
-    position: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" }, // Centré au milieu
-    size: { width: "640px", height: "360px" } // Format 16:9
-  },
-  {
     name: "charliebitmyfinger",
     code: ["c", "h", "a", "r", "l", "i", "e", "b", "i", "t", "m", "y", "f", "i", "n", "g", "e", "r"],
     content: "iframe",

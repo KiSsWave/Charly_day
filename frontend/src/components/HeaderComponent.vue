@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div class="logo" @click="$router.push({ name: 'HomeView' })">
+    <div class="logo" @click="goToHome">
       <img src="@/assets/logo.png" alt="Charly">
       <h1>Charly</h1>
     </div>
@@ -8,15 +8,45 @@
       <ul>
         <li><router-link to="/">Accueil</router-link></li>
         <li><router-link to="/need/new">Créer un besoin</router-link></li>
-        <li><router-link to="/login">Connexion</router-link></li>
+        <li v-if="!isAuthenticated"><router-link to="/login">Connexion</router-link></li>
+        <li v-else>
+          <button @click="logout">Déconnexion</button>
+        </li>
       </ul>
     </nav>
   </header>
 </template>
 
 <script>
+import { isAuthenticated, logout } from '@/services/authProvider.js';
+import { ref, watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
+
 export default {
-  name: "HeaderComponent"
+  name: "HeaderComponent",
+  setup() {
+    const router = useRouter();
+    const authenticated = ref(isAuthenticated());
+
+    watchEffect(() => {
+      authenticated.value = isAuthenticated();
+    });
+
+    const goToHome = () => {
+      router.push({ path: '/' });
+    };
+
+    const logout = () => {
+      logout();
+      router.push('/');
+    };
+
+    return {
+      isAuthenticated: authenticated,
+      logout,
+      goToHome
+    };
+  }
 };
 </script>
 
@@ -33,6 +63,7 @@ export default {
 .logo {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .logo img {
@@ -47,10 +78,6 @@ export default {
   font-size: 2rem;
 }
 
-.logo:hover {
-  cursor: pointer;
-}
-
 nav ul {
   list-style-type: none;
   display: flex;
@@ -59,14 +86,17 @@ nav ul {
   padding: 0;
 }
 
-nav a {
+nav a, nav button {
   color: white;
   text-decoration: none;
   font-size: larger;
   transition: color 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-nav a:hover {
+nav a:hover, nav button:hover {
   color: #ffcccc;
   text-decoration: underline;
 }
