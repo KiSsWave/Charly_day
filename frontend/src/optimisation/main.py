@@ -1,6 +1,6 @@
 from models import Besoin, Salarie
 from scoring import calculer_score
-from optimizer import affectation_optimisee
+from optimizer import algorithme_genetique
 
 # Charger les fichiers CSV
 def charger_donnees(fichier_besoins, fichier_competences):
@@ -40,10 +40,11 @@ def charger_donnees(fichier_besoins, fichier_competences):
     return besoins_list, salaries_dict
 
 # Charger les données
-besoins_list, salaries_dict = charger_donnees("csv_2025/etudiant/01_pb_simples/Probleme_2_nbSalaries_3_nbClients_3_nbTaches_5.csv", "csv_2025/etudiant/01_pb_simples/Probleme_2_nbSalaries_3_nbClients_3_nbTaches_5.csv")
+besoins_list, salaries_dict = charger_donnees("csv_2025/etudiant/02_pb_complexes/Probleme_10_nbSalaries_26_nbClients_26_nbTaches_3.csv",
+                                              "csv_2025/etudiant/02_pb_complexes/Probleme_10_nbSalaries_26_nbClients_26_nbTaches_3.csv")
 
 # Exécuter l'algorithme optimisé
-affectation = affectation_optimisee(besoins_list, salaries_dict)
+affectation = algorithme_genetique(besoins_list, salaries_dict)
 
 # Calculer et afficher le score
 score = calculer_score(affectation, besoins_list, salaries_dict)
