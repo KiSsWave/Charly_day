@@ -2,7 +2,9 @@
 
 namespace charly\infrastructure\repositories;
 
+use charly\core\domain\Salarie\Competence;
 use charly\core\domain\Salarie\Salarie;
+use charly\core\dto\CompetenceDTO;
 use charly\core\dto\CreateSalarieDTO;
 use charly\core\repositoryInterfaces\SalarieRepositoryInterface;
 use Exception;
@@ -82,5 +84,22 @@ class SalarieRepository implements SalarieRepositoryInterface
         }catch (PDOException $e){
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function addCompetence(string $nom)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO competences (nom) VALUES (:nom)");
+        $stmt->execute(['nom' => $nom]);    }
+
+    public function deleteCompetence(string $id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM competences WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+    }
+
+    public function modifCompetence(CompetenceDTO $competence)
+    {
+        $stmt = $this->pdo->prepare("UPDATE competences SET nom = :nom WHERE id = :id");
+        $stmt->execute(['nom' => $competence->getNom(), 'id' => $competence->getId()]);
     }
 }

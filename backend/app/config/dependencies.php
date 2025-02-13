@@ -32,6 +32,7 @@ use charly\application\action\CreateSalarieAction;
 use charly\core\services\Salaries\SalarieServiceInterface;
 use charly\core\repositoryInterfaces\SalarieRepositoryInterface;
 use charly\application\action\GetSalariesAction;
+use charly\application\action\ManageCompetenceAction;
 
 
 return [
@@ -139,6 +140,10 @@ return [
     GetUserNeedsAction::class => function (ContainerInterface $c) {
         return new GetUserNeedsAction($c->get(NeedServiceInterface::class));
     },
+
+    ManageCompetenceAction::class => function (ContainerInterface $c) {
+    return new ManageCompetenceAction($c->get(SalarieServiceInterface::class));
+    }
 
 
 ];
