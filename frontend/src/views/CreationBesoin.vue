@@ -6,7 +6,7 @@
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="client_name">Nom de l'entreprise</label>
-          <input type="text" id="client_name" v-model="form.companyName" placeholder="Nom" required />
+          <input type="text" id="client_name" v-model="form.client_name" placeholder="Nom" required />
         </div>
 
         <div class="form-group">
@@ -15,13 +15,14 @@
         </div>
 
         <div class="form-group">
-          <label for="competence">Catégorie</label>
-          <select id="competence" v-model="form.category" required>
+          <label for="competence_type">Compétence</label>
+          <!--<select id="competence" v-model="form.category">
             <option value="" disabled>Sélectionner une compétence</option>
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
             </option>
-          </select>
+          </select>-->
+          <input type="text" id="competence_type" v-model="form.competence_type" placeholder="Catégorie" required />
         </div>
 
         <button type="submit" class="btn">Créer</button>
@@ -33,6 +34,7 @@
 
 <script>
 import axios from "../api/index.js";
+import { isAuthenticated } from "@/services/authProvider.js";
 import { ref, onMounted } from "vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
@@ -41,9 +43,9 @@ export default {
   components: { HeaderComponent, FooterComponent },
   setup() {
     const form = ref({
-      companyName: "",
+      client_name: "",
       description: "",
-      category: "",
+      competence_type: "",
     });
 
     const categories = ref([]);
@@ -59,8 +61,16 @@ export default {
 
     const submitForm = async () => {
       try {
-        await axios.post("/needs", form.value);
-        alert("Besoin créé avec succès !");
+
+        if (!isAuthenticated()) {
+          await axios.post("/needs/anonymous", form.value);
+          alert("Besoin créé avec succès !");
+          return;
+        } else {
+          await axios.post("/needs", form.value);
+          alert("Besoin créé avec succès !");
+        }
+
       } catch (error) {
         console.error("Erreur lors de la création du besoin :", error);
       }

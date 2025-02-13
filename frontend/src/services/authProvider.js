@@ -26,4 +26,9 @@ const getUserIdentity = () => {
     return token ? jwtDecode(token) : null;
 };
 
-export { isAuthenticated, removeToken, setToken, setRole, getRole, getUserIdentity };
+const logout = () => {
+    removeToken();
+    setRole(null);
+}
+
+export { isAuthenticated, removeToken, setToken, setRole, getRole, getUserIdentity, logout };
