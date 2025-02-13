@@ -40,8 +40,8 @@ def charger_donnees(fichier_besoins, fichier_competences):
     return besoins_list, salaries_dict
 
 # Charger les données
-besoins_list, salaries_dict = charger_donnees("csv_2025/etudiant/02_pb_complexes/Probleme_10_nbSalaries_26_nbClients_26_nbTaches_3.csv",
-                                              "csv_2025/etudiant/02_pb_complexes/Probleme_10_nbSalaries_26_nbClients_26_nbTaches_3.csv")
+besoins_list, salaries_dict = charger_donnees("csv_2025/etudiant/01_pb_simples/Probleme_3_nbSalaries_5_nbClients_5_nbTaches_2.csv",
+                                              "csv_2025/etudiant/01_pb_simples/Probleme_3_nbSalaries_5_nbClients_5_nbTaches_2.csv")
 
 # Exécuter l'algorithme optimisé
 affectation = algorithme_genetique(besoins_list, salaries_dict)
