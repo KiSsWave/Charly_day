@@ -13,6 +13,8 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/register', charly\application\action\RegisterAction::class);
 
     $app->post('/needs', charly\application\action\CreateNeedAction::class);
+    $app->post('/salaries' , \charly\application\action\CreateSalarieAction::class);
+    $app->get('/salaries' , \charly\application\action\GetSalariesAction::class);
 
     return $app;
 };
