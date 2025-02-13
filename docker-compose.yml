@@ -52,3 +52,17 @@ services:
       - charly.net
     depends_on:
       - api
+
+
+  java:
+    build:
+      context: ./frontend/src/optimisation
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./frontend/src/optimisation:/app
+    networks:
+      - charly.net
+    depends_on:
+      - api
