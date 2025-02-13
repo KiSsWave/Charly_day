@@ -2,7 +2,7 @@
   <div class="need-list">
     <div class="title">
       <img src="@/assets/charly_list.png" alt="Charly qui montre une liste">
-      <h1>Liste des besoins</h1>
+      <h1>Vos besoins</h1>
     </div>
     <div v-for="(need, index) in needs" :key="index">
       <NeedPreview :Need="need" />

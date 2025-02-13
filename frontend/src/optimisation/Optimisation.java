@@ -80,16 +80,22 @@ public class Optimisation {
             }
         }
 
+        // Appliquer les malus après l'affectation
         for (String client : clientBesoinsCount.keySet()) {
-            if (!clientsServis.contains(client)) score -= 10;
+            if (!clientsServis.contains(client)) {
+                score -= 10;
+            }
         }
 
         for (String salarie : salaries.keySet()) {
-            if (!salariesAffectes.contains(salarie)) score -= 10;
+            if (!salariesAffectes.contains(salarie)) {
+                score -= 10;
+            }
         }
 
         return score;
     }
+
 
 
     public static void exporterAffectation(String fichier, Map<String, Integer> affectation, List<Besoin> besoins, int score) {
@@ -130,17 +136,27 @@ public class Optimisation {
     private static Map<String, Integer> genererAffectation(List<Besoin> besoins, Map<String, Salarie> salaries) {
         Map<String, Integer> affectation = new HashMap<>();
         List<String> salariesDispo = new ArrayList<>(salaries.keySet());
-        Collections.shuffle(salariesDispo);
 
         for (Besoin besoin : besoins) {
+            String meilleurSalarie = null;
+            int meilleurInteret = -1;
+
             for (String salarie : salariesDispo) {
                 if (salaries.get(salarie).competences.containsKey(besoin.type)) {
-                    affectation.put(salarie, besoin.id);
-                    salariesDispo.remove(salarie);
-                    break;
+                    int interet = salaries.get(salarie).competences.get(besoin.type);
+                    if (interet > meilleurInteret) {
+                        meilleurInteret = interet;
+                        meilleurSalarie = salarie;
+                    }
                 }
+            }
+
+            if (meilleurSalarie != null) {
+                affectation.put(meilleurSalarie, besoin.id);
+                salariesDispo.remove(meilleurSalarie); // Un salarié ne peut être affecté qu'à un besoin
             }
         }
         return affectation;
     }
+
 }
