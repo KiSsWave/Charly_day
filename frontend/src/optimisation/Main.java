@@ -14,6 +14,7 @@ public class Main {
         // Exécuter l'algorithme d'optimisation
         Map<String, Integer> affectation = Optimisation.algorithmeGenetique(besoinsList, salariesDict, 100, 30);
         int score = Optimisation.calculerScore(affectation, besoinsList, salariesDict);
+        Optimisation.exporterAffectation("./src/optimisation/resultat.csv", affectation, besoinsList, score);
 
         // Affichage et sauvegarde
         System.out.println("Affectation générée : " + affectation);
