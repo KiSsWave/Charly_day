@@ -27,6 +27,11 @@ use charly\infrastructure\repositories\UserRepository;
 use Dotenv\Dotenv;
 use Psr\Container\ContainerInterface;
 use charly\application\middleware\CorsMiddleware;
+use charly\application\action\CreateSalarieAction;
+use charly\core\services\Salaries\SalarieServiceInterface;
+use charly\core\repositoryInterfaces\SalarieRepositoryInterface;
+use charly\application\action\GetSalariesAction;
+use charly\application\action\ManageCompetenceAction;
 
 
 return [
@@ -71,6 +76,10 @@ return [
       return new UserRepository($c->get(PDO::class));
     },
 
+    SalarieRepositoryInterface::class => function(ContainerInterface $c){
+    return new SalarieRepository($c->get(PDO::class));
+    },
+
     AuthnServiceInterface::class => function (ContainerInterface $c){
         return new AuthnService($c->get(UserRepositoryInterface::class));
     },
@@ -81,6 +90,10 @@ return [
 
     AuthzServiceInterface::class => function (ContainerInterface $c) {
         return new AuthzService($c->get(UserRepositoryInterface::class));
+    },
+
+    SalarieServiceInterface::class => function (ContainerInterface $c) {
+    return new SalarieService($c->get(SalarieRepositoryInterface::class));
     },
 
     AuthnMiddleware::class =>function (ContainerInterface $c){
@@ -115,6 +128,13 @@ return [
     CreateNeedAction::class => function (ContainerInterface $c) {
         return new CreateNeedAction($c->get(NeedServiceInterface::class));
     },
+    CreateSalarieAction::class => function (ContainerInterface $c) {
+    return new CreateSalarieAction($c->get(SalarieServiceInterface::class));
+    },
+
+    GetSalariesAction::class => function (ContainerInterface $c) {
+    return new GetSalariesAction($c->get(SalarieServiceInterface::class));
+    },
 
     GetUserNeedsAction::class => function (ContainerInterface $c) {
         return new GetUserNeedsAction($c->get(NeedServiceInterface::class));
@@ -123,5 +143,10 @@ return [
     UpdateNeedAction::class => function (ContainerInterface $c) {
         return new UpdateNeedAction($c->get(NeedServiceInterface::class));
     },
+
+    ManageCompetenceAction::class => function (ContainerInterface $c) {
+    return new ManageCompetenceAction($c->get(SalarieServiceInterface::class));
+    }
+
 
 ];

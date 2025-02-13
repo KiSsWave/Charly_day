@@ -12,6 +12,9 @@ return function (\Slim\App $app): \Slim\App {
     $app->post('/signin', charly\application\action\SignInAction::class);
     $app->post('/register', charly\application\action\RegisterAction::class);
 
+    $app->post('/salaries' , \charly\application\action\CreateSalarieAction::class);
+    $app->get('/salaries' , \charly\application\action\GetSalariesAction::class);
+    $app->post('/competences', \charly\application\action\ManageCompetenceAction::class);
     $app->post('/needs/anonymous', charly\application\action\CreateUnauthNeedAction::class);
     $app->get('/needs/anonymous', charly\application\action\GetUnauthNeedsAction::class);
 
@@ -21,6 +24,9 @@ return function (\Slim\App $app): \Slim\App {
         $app->patch('/needs/{id}', charly\application\action\UpdateNeedAction::class)->add(charly\application\middleware\AuthzUserMiddleware::class);
 
     })->add(charly\application\middleware\AuthnMiddleware::class);
+
+    $app->post('/mail', charly\application\action\SendMailAction::class);
+
 
     return $app;
 
