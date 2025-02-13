@@ -52,4 +52,9 @@ class NeedService implements NeedServiceInterface
 
         return new NeedDTO($need);
     }
+
+    public function findAllNeeds(): array
+    {
+        return $this->needRepository->findAll();
+    }
 }

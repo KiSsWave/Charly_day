@@ -18,6 +18,7 @@ return function (\Slim\App $app): \Slim\App {
         $app->post('/needs', charly\application\action\CreateNeedAction::class)->add(charly\application\middleware\AuthzUserMiddleware::class);
         $app->get('/needs', charly\application\action\GetUserNeedsAction::class)->add(charly\application\middleware\AuthzUserMiddleware::class);
         $app->patch('/needs/{id}', charly\application\action\UpdateNeedAction::class)->add(charly\application\middleware\AuthzUserMiddleware::class);
+        $app->get('/admin/needs', charly\application\action\GetAllNeedsAction::class)->add(charly\application\middleware\AuthzAdminMiddleware::class);
         $app->post('/salaries' , \charly\application\action\CreateSalarieAction::class)->add(charly\application\middleware\AuthzAdminMiddleware::class);
         $app->get('/salaries' , \charly\application\action\GetSalariesAction::class)->add(charly\application\middleware\AuthzAdminMiddleware::class);
         $app->post('/competences', \charly\application\action\ManageCompetenceAction::class)->add(charly\application\middleware\AuthzAdminMiddleware::class);

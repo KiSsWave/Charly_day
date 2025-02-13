@@ -92,4 +92,25 @@ class NeedRepository implements NeedRepositoryInterface {
             throw new \RuntimeException("Le besoin n'a pas pu être mis à jour");
         }
     }
+
+    public function findAll(): array
+    {
+        $stmt = $this->pdo->query('SELECT * FROM needs ORDER BY created_at DESC');
+        $needs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(function($need) {
+            $serviceNeed = new Need(
+                $need['client_name'],
+                $need['description'],
+                $need['competence_type']
+            );
+            $serviceNeed->setStatus($need['status']);
+            $serviceNeed->setId($need['id']);
+
+            $needDTO = new NeedDTO($serviceNeed);
+            $needDTO->id = $need['id'];
+
+            return $needDTO;
+        }, $needs);
+    }
 }
