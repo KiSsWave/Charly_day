@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use charly\application\action\CreateNeedAction;
 use charly\application\action\CreateUnauthNeedAction;
+use charly\application\action\CsvAction;
 use charly\application\action\GetUserNeedsAction;
 use charly\application\action\RegisterAction;
 use charly\application\action\SignInAction;
@@ -20,8 +21,11 @@ use charly\core\services\auth\AuthnService;
 use charly\core\services\auth\AuthnServiceInterface;
 use charly\core\services\auth\AuthzService;
 use charly\core\services\auth\AuthzServiceInterface;
+use charly\core\services\Csv\CsvService;
 use charly\core\services\need\NeedService;
 use charly\core\services\need\NeedServiceInterface;
+use charly\Infrastructure\http\CsvClient;
+use charly\Infrastructure\repositories\CsvRepository;
 use charly\infrastructure\repositories\NeedRepository;
 use charly\infrastructure\repositories\UserRepository;
 use Dotenv\Dotenv;
@@ -146,7 +150,26 @@ return [
 
     ManageCompetenceAction::class => function (ContainerInterface $c) {
     return new ManageCompetenceAction($c->get(SalarieServiceInterface::class));
-    }
+    },
+
+    CsvClient::class => function () {
+        return new CsvClient('http://localhost:8080/optimisation');  // L'URL de ton serveur Java
+    },
+
+    CsvRepository::class => function () {
+        return new CsvRepository('../../../frontend/src/optimisation/csv_2025');  // Chemin vers le répertoire contenant les fichiers CSV
+    },
+
+    CsvService::class => function ($container) {
+        return new CsvService(
+            $container->get(CsvRepository::class),
+            $container->get(CsvClient::class)
+        );
+    },
+
+    CsvAction::class => function ($container) {
+        return new CsvAction($container->get(CsvService::class));
+    },
 
 
 ];
