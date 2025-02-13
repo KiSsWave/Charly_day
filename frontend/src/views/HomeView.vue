@@ -1,47 +1,21 @@
-<script setup>
-import { ref, onMounted } from "vue";
-
-const iframeVisible = ref(false);
-const konamiCode = [
-  "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
-  "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
-  "b", "a"
-];
-let userInput = [];
-
-onMounted(() => {
-  window.addEventListener("keydown", (event) => {
-    userInput.push(event.key);
-
-    if (userInput.join("").toLowerCase().includes(konamiCode.join("").toLowerCase())) {
-      iframeVisible.value = true;
-    }
-
-    if (userInput.length > konamiCode.length) {
-      userInput.shift();
-    }
-  });
-});
-</script>
-
 <template>
-  <div class="wrapper">
-    <iframe
-      v-if="iframeVisible"
-      src="https://subway-surfers.org/berlin/"
-      style="border: none;"
-    ></iframe>
+  <div>
+    <h1>Home</h1>
+    <p>Welcome to the Home page</p>
+    <SecretComponent/>
   </div>
 </template>
 
-<style scoped>
-.wrapper {
-  width: 100%;
-  height: 100dvh;
-}
+<script>
+import SecretComponent from '@/components/SecretComponent.vue'
 
-iframe {
-  width: 100%;
-  height: 100dvh;
+export default {
+  name: 'HomeView',
+  components: {
+    SecretComponent
+  }
 }
+</script>
+
+<style>
 </style>
